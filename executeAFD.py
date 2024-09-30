@@ -16,30 +16,7 @@ def reportOccurrences(afd, text):
 def main(content):
     states = {0, 1, 2, 3} 
     alphabet = {'a', 'b'} 
-    transitions = {
-        (1, ' '): 1, 
-        (1, '\t'): 1,
-        
-        #Do while loop
-        (1, 'd'): 2, 
-        (2, 'o'): 3, 
-        (3, ' '): 3,
-        (3, '\t'): 3,
-        (3, '{'): 4,
-        
-        #While loop
-        (1, 'w'): 12,
-        (12, 'h'): 13,
-        (13, 'i'): 14,
-        (14, 'l'): 15,
-        (15, 'e'): 17,
-        
-        #For loop
-        (1, 'f'): 20,
-        (20, 'o'): 21,
-        (21, 'r'): 22,
-
-        } 
+    transitions = {} 
     startState = 0
     acceptStates = {2}
     afd = AFD(states, alphabet, transitions, startState, acceptStates)
