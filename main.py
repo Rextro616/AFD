@@ -3,6 +3,7 @@ from tkinter import filedialog, Text, Scrollbar, messagebox
 import pandas as pd
 from docx import Document
 from bs4 import BeautifulSoup
+from executeAFD import main
 import csv
 
 def readFile(pathFile):
@@ -53,11 +54,11 @@ def selectFile():
         content = readFile(file)
         outText.delete(1.0, tk.END)  # Limpiar cuadro de texto
         outText.insert(tk.END, content)  # Mostrar el contenido en el cuadro de texto
-        print(content)
 
 def downloadReport():
     content = outText.get(1.0, tk.END).strip()
-    
+    occurrences = main(content)
+    print(content)
     if content:
         savePath = filedialog.asksaveasfilename(
             defaultextension=".csv", 
