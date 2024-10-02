@@ -11,7 +11,7 @@ class AFD:
         if (self.currentState, char) in self.transitions:
             self.currentState = self.transitions[(self.currentState, char)]
         else:
-            self.currentState = None
+            self.currentState = self.reset()
 
     def isAccepting(self):
         return self.currentState in self.acceptStates
@@ -20,6 +20,27 @@ class AFD:
         self.currentState = self.startState
 
     def run(self, inputString):
+        self.reset()
+        occurrences = []
+        text = ""
+        line = 1
+        for char in inputString:
+            self.transition(char)
+            text += char
+            if char == '\n':
+                line += 1
+            if self.currentState is None:
+                self.reset()
+                text = ""
+            if self.isAccepting():
+                occurrences.append({
+                    'text': text,
+                    'linea': line,
+                })
+                text = ""
+        return occurrences
+        
+    def runTables(self, inputString):
         self.reset()
         for char in inputString:
             self.transition(char)

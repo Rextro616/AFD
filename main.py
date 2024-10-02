@@ -1,63 +1,27 @@
 import tkinter as tk
 from tkinter import filedialog, Text, Scrollbar, messagebox
-import pandas as pd
-from docx import Document
-from bs4 import BeautifulSoup
+from executeAFD import main
 import csv
+from file import readFile
 
-def readFile(pathFile):
-    extension = pathFile.split('.')[-1].lower()
-
-    if extension == 'csv':
-        try:
-            df = pd.read_csv(pathFile)
-            return df.to_string()
-        except Exception as e:
-            return f"Error al leer el archivo CSV: {e}"
-    elif extension == 'xlsx':
-        try:
-            df = pd.read_excel(pathFile, engine='openpyxl')
-            return df.to_string()
-        except Exception as e:
-            return f"Error al leer el archivo XLSX: {e}"
-    elif extension == 'docx':
-        try:
-            doc = Document(pathFile)
-            fullText = [paragraphs.text for paragraphs in doc.paragraphs]
-            return '\n'.join(fullText)
-        except Exception as e:
-            return f"Error al leer el archivo DOCX: {e}"
-    elif extension == 'html':
-        try:
-            with open(pathFile, 'r', encoding='utf-8') as file:
-                soup = BeautifulSoup(file, 'html.parser')
-                try:
-                    tables = pd.read_html(pathFile)
-                    return tables[0].to_string()  # Mostramos solo la primera tabla
-                except:
-                    pass
-                
-                return soup.get_text()
-        except Exception as e:
-            return f"Error al leer el archivo HTML: {e}"
-    else:
-        return "Tipo de archivo no soportado."
+content = ""
+extension = ""
 
 def selectFile():
+    global content, extension
     file = filedialog.askopenfilename(
         title="Seleccionar archivo", 
         filetypes=[("Todos los archivos", "*.*"), ("CSV", "*.csv"), 
                    ("Excel", "*.xlsx"), ("Word", "*.docx"), ("HTML", "*.html")]
     )
     if file:
-        content = readFile(file)
+        extension = file.split('.')[-1].lower()  # Obtener la extensión del archivo
+        content = readFile(file, extension)
         outText.delete(1.0, tk.END)  # Limpiar cuadro de texto
         outText.insert(tk.END, content)  # Mostrar el contenido en el cuadro de texto
-        print(content)
 
 def downloadReport():
-    content = outText.get(1.0, tk.END).strip()
-    
+    occurrences = main(content, extension)
     if content:
         savePath = filedialog.asksaveasfilename(
             defaultextension=".csv", 
