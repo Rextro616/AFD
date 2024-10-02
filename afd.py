@@ -24,20 +24,24 @@ class AFD:
         occurrences = []
         text = ""
         line = 1
+        lines = [line]
         for char in inputString:
             self.transition(char)
             text += char
             if char == '\n':
                 line += 1
+                lines.append(line)
             if self.currentState is None:
                 self.reset()
                 text = ""
+                lines = [line]
             if self.isAccepting():
                 occurrences.append({
                     'text': text,
-                    'linea': line,
+                    'lineas': f"{lines[0]} a la {line}" if len(lines) > 1 else f"{line}"
                 })
                 text = ""
+                lines = [line]
         return occurrences
         
     def runTables(self, inputString):
