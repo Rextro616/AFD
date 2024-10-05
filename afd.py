@@ -42,6 +42,7 @@ class AFD:
                 })
                 text = ""
                 lines = [line]
+                self.reset()
         return occurrences
         
     def runTables(self, inputString):
