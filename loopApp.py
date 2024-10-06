@@ -45,7 +45,7 @@ class LoopApp:
 
     def downloadReport(self):
         occurrences = main(self.content, self.extension)
-        if self.content:
+        if occurrences:
             savePath = filedialog.asksaveasfilename(
                 defaultextension=".csv", 
                 filetypes=[("CSV files", "*.csv")],

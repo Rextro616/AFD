@@ -9,9 +9,7 @@ from readFileUtils import readFile
 class TestAFD(unittest.TestCase): 
     def test(self):
         file = readFile("./test/ciclo_control.docx", "docx")
-        print(file)
         ocurrences = main(file, "docx")
-        print(ocurrences)
         self.assertEqual(ocurrences, [{'lineas': '10 a la 12',
             'text': 'for(int i=0; i < arreglo.length; i++) {\n\tsumar(i);\n}'},
             {'lineas': '14 a la 19',
@@ -19,7 +17,11 @@ class TestAFD(unittest.TestCase):
             {'lineas': '21 a la 26', 'text': 'while(true)\n{\n\nhola();\n\n}'},
             {'lineas': '34 a la 37', 'text': 'while(false) {\n\nadios()\n}'}
             ])
-
+    
+    def testEmptyFile(self):
+        file = readFile("./test/empty", "docx")
+        ocurrences = main(file, "docx")
+        self.assertEqual(ocurrences, [])
 
 if __name__ == '__main__':
     unittest.main()
